@@ -26,7 +26,15 @@ export class UsersPage {
   }
 
   ionViewDidLoad() {
-    console.log(this.userProvider);
+    this.getUsers();
+  }
+
+  public getUsers(): void {
+    this.userProvider.getUsers().subscribe(
+      (response:any)=>{
+        console.log(response);
+      }
+    );
   }
 
 }
