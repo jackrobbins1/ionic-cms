@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 
+import { User } from '../../models/user/user';
 import { UserProvider } from '../../providers/user/user';
 
 
@@ -18,10 +19,14 @@ import { UserProvider } from '../../providers/user/user';
 })
 export class UsersPage {
 
+  public users: User[];
+  private loader: any;
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    private userProvider: UserProvider
+    private userProvider: UserProvider,
+    private loadingCtrl:LoadingController,
   ) {
   }
 
@@ -30,11 +35,23 @@ export class UsersPage {
   }
 
   public getUsers(): void {
+    this.presentLoader();
+
     this.userProvider.getUsers().subscribe(
       (response:any)=>{
-        console.log(response);
+        this.users = response.users;
+        this.loader.dismiss();
+
       }
     );
+  }
+
+  private presentLoader(): void{
+    this.loader = this.loadingCtrl.create({
+      content: 'Loading...'
+    });
+
+    this.loader.present();
   }
 
 }
